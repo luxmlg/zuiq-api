@@ -23,7 +23,9 @@ server.applyMiddleware({ app, path: "/graphql" });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-sequelize.sync().then(async () => {
+const isTest = true;
+
+sequelize.sync({ force: isTest }).then(async () => {
   httpServer.listen({ port: 8000 }, () => {
     console.log("Apollo Server on http://localhost:8000/graphql");
   });
