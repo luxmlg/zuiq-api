@@ -1,0 +1,43 @@
+{
+  "name": "zuiq-api",
+  "version": "1.0.0",
+  "description": "Quiz Maker",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon -r esm index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luxmlg/zuiq-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luxmlg/zuiq-api/issues"
+  },
+  "homepage": "https://github.com/luxmlg/zuiq-api#readme",
+  "dependencies": {
+    "apollo-server": "^2.16.0",
+    "apollo-server-express": "^2.16.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-resolvers": "^0.4.2",
+    "pg": "^8.3.0",
+    "sequelize": "^6.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "axios": "^0.19.2",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "sequelize-cli": "^6.2.0"
+  }
+}
