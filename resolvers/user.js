@@ -38,5 +38,20 @@ export default {
 
       return { token: createToken(user, secret, "30m") };
     },
+
+    signIn: async (parent, { login, password }, { models, secret }) => {
+      const user = await models.User.findByLogin(login);
+
+      if (!user) {
+        throw new UserInputError("No user found with this credentials.");
+      }
+      const isValid = await user.validatePassword(password);
+
+      if (!isValid) {
+        throw new AuthenticationError("Invalid password.");
+      }
+
+      return { token: createToken(user, secret, "30m") };
+    },
   },
 };
