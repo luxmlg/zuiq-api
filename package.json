@@ -19,6 +19,7 @@
   "dependencies": {
     "apollo-server": "^2.16.0",
     "apollo-server-express": "^2.16.0",
+    "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
@@ -26,6 +27,7 @@
     "graphql": "^15.3.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-resolvers": "^0.4.2",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.0",
     "sequelize": "^6.3.3"
   },
