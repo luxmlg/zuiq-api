@@ -22,5 +22,6 @@ export default gql`
     username: String!
     email: String!
     quizzes: [Quiz!]
+    role: String!
   }
 `;

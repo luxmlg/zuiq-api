@@ -37,7 +37,6 @@ const server = new ApolloServer({
 
     if (req) {
       const me = await getMe(req);
-      console.log(me);
       return {
         models,
         me,

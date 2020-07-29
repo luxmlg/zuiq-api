@@ -56,6 +56,9 @@ module.exports = (sequelize, DataTypes) => {
           len: [7, 42],
         },
       },
+      role: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
