@@ -64,4 +64,14 @@ export default {
       }
     ),
   },
+
+  User: {
+    quizzes: async (user, args, { models }) => {
+      return await models.Quiz.findAll({
+        where: {
+          UserId: user.id,
+        },
+      });
+    },
+  },
 };

@@ -14,8 +14,9 @@ export default {
   Mutation: {
     createQuiz: combineResolvers(
       isAuthenticated,
-      async (parent, { text }, { models, me }) => {
+      async (parent, { name, text }, { models, me }) => {
         const quiz = await models.Quiz.create({
+          name,
           text,
           UserId: me.id,
         });
@@ -30,5 +31,10 @@ export default {
         return await models.Quiz.destroy({ where: { id } });
       }
     ),
+  },
+  Quiz: {
+    user: async (quiz, args, { models }) => {
+      return await models.User.findByPk(quiz.UserId);
+    },
   },
 };

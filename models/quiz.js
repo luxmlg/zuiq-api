@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Quiz.init(
     {
+      name: DataTypes.STRING,
       text: DataTypes.STRING,
       createdAt: DataTypes.DATE,
     },
