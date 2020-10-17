@@ -9,6 +9,8 @@ export default gql`
   extend type Mutation {
     createQuiz(name: String!, text: String!): Quiz!
     deleteQuiz(id: ID!): Boolean!
+
+    singleUpload(file: Upload!): File!
   }
 
   type Quiz {
@@ -17,5 +19,13 @@ export default gql`
     text: String!
     createdAt: Date!
     user: User!
+  }
+
+  type File {
+    id: ID!
+    path: String!
+    filename: String!
+    mimetype: String!
+    encoding: String!
   }
 `;
