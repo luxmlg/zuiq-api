@@ -14,6 +14,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   Quiz.init(
     {
+      id: {
+        primaryKey: true,
+        allowNull: false,
+        type: DataTypes.UUID,
+        validate: {
+          notNull: true,
+        },
+        defaultValue: sequelize.UUIDV4,
+      },
       name: DataTypes.STRING,
       text: DataTypes.STRING,
       createdAt: DataTypes.DATE,

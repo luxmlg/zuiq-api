@@ -1,14 +1,14 @@
 import { combineResolvers } from "graphql-resolvers";
-import { isAuthenticated, isQuizOwner } from "./authorization";
 import { createWriteStream } from "fs";
-import * as shortid from "shortid";
+import { v4 as uuidv4 } from "uuid";
 
 import models from "../models";
+import { isAuthenticated, isQuizOwner } from "./authorization";
 
 const uploadDir = `images`;
 
 const storeUpload = async ({ stream, filename }) => {
-  const id = shortid.generate();
+  const id = uuidv4();
   const path = `${uploadDir}/${id}-${filename}`;
 
   return new Promise((resolve, reject) =>
@@ -25,7 +25,7 @@ const processUpload = async (upload) => {
   const { createReadStream, filename, mimetype, encoding } = await upload;
   const stream = createReadStream();
   const { id, path } = await storeUpload({ stream, filename });
-  return recordFile({ filename, mimetype, encoding, path });
+  return recordFile({ id, filename, mimetype, encoding, path });
 };
 
 export default {
@@ -43,6 +43,7 @@ export default {
       isAuthenticated,
       async (parent, { name, text }, { models, me }) => {
         const quiz = await models.Quiz.create({
+          id: uuidv4(),
           name,
           text,
           UserId: me.id,

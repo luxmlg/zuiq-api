@@ -25,6 +25,18 @@ const getMe = async (req) => {
   }
 };
 
+const getParticipantMe = async (req) => {
+  const token = req.headers["p-token"];
+
+  if (token) {
+    try {
+      return await jwt.verify(token, process.env.SECRET);
+    } catch (e) {
+      throw new AuthenticationError("Meeting ended or Invalid Token.");
+    }
+  }
+};
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
@@ -37,9 +49,11 @@ const server = new ApolloServer({
 
     if (req) {
       const me = await getMe(req);
+      const participantMe = await getParticipantMe(req);
       return {
         models,
         me,
+        participantMe,
         secret: process.env.SECRET,
       };
     }

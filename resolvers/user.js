@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
 import { combineResolvers } from "graphql-resolvers";
 import { AuthenticationError, UserInputError } from "apollo-server";
+import { v4 as uuidv4 } from "uuid";
 
 import { isAdmin } from "./authorization";
 
-const createToken = async (user, secret, expiresIn) => {
+const createUserToken = async (user, secret, expiresIn) => {
   const { id, email, username } = user;
   return await jwt.sign({ id, email, username }, secret, { expiresIn });
 };
@@ -34,12 +35,13 @@ export default {
       { models, secret }
     ) => {
       const user = await models.User.create({
+        id: uuidv4(),
         username,
         email,
         password,
       });
 
-      return { token: createToken(user, secret, "30m") };
+      return { token: createUserToken(user, secret, "30m") };
     },
 
     signIn: async (parent, { login, password }, { models, secret }) => {
@@ -54,7 +56,7 @@ export default {
         throw new AuthenticationError("Invalid password.");
       }
 
-      return { token: createToken(user, secret, "30m") };
+      return { token: createUserToken(user, secret, "30m") };
     },
 
     deleteUser: combineResolvers(

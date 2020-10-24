@@ -1,6 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 import bcrypt from "bcrypt";
+import { Sequelize } from ".";
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -31,6 +32,15 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
+      id: {
+        primaryKey: true,
+        allowNull: false,
+        type: DataTypes.UUID,
+        validate: {
+          notNull: true,
+        },
+        defaultValue: sequelize.UUIDV4,
+      },
       username: {
         type: DataTypes.STRING,
         unqiue: true,

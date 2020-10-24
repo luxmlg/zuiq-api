@@ -13,10 +13,6 @@ export default gql`
     deleteUser(id: ID!): Boolean!
   }
 
-  type Token {
-    token: String!
-  }
-
   type User {
     id: ID!
     username: String!
