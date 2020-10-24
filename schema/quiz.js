@@ -9,6 +9,7 @@ export default gql`
   extend type Mutation {
     createQuiz(name: String!, text: String!): Quiz!
     deleteQuiz(id: ID!): Boolean!
+    updateQuiz(id: ID!, name: String!, text: String!): Quiz!
 
     singleUpload(file: Upload!): File!
   }

@@ -59,6 +59,22 @@ export default {
         return await models.Quiz.destroy({ where: { id } });
       }
     ),
+    updateQuiz: combineResolvers(
+      isAuthenticated,
+      isQuizOwner,
+      async(parent, {id, name, text}, {modles}) => {
+        const quiz = await models.Quiz.findByPk(id);
+        if(quiz) {
+          quiz.update({
+            id,
+            name,
+            text
+          });
+        }
+
+        return quiz;
+      }
+    ),
     singleUpload: (parent, { file }) => processUpload(file),
   },
   Quiz: {
