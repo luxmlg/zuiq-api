@@ -1,5 +1,6 @@
 import { gql } from "apollo-server-express";
 
+// needs query participantMeeting: Meeting!
 export default gql`
   extend type Query {
     participants(meetingId: ID!): [Participant]!
@@ -7,14 +8,14 @@ export default gql`
   }
 
   extend type Mutation {
-    createParticipant(name: String!, meetingId: ID!): Token!
+    createParticipant(name: String!, token: String!): Token!
     updateAnswers(answers: String!): Participant
     completeMeeting: Participant
   }
 
   type Participant {
     id: ID!
-    meeting: Meeting!
+    meeting: Meeting
     name: String!
     hasCompleted: Boolean!
     answers: String!

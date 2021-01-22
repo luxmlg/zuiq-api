@@ -20,23 +20,42 @@ export default {
     },
 
     participant: async (parent, { id }, { models }) => {
-      return models.Participant.findByPk(id);
+      const a = await models.Participant.findOne({
+        where: {
+          id,
+        },
+        include: {
+          model: models.Meeting,
+          // required: true,
+        },
+      });
+      console.log(a);
+      return a;
+
+      return models.Participant.findOne({
+        where: {
+          id,
+        },
+        include: {
+          model: models.Meeting,
+          // required: true,
+        },
+      });
     },
   },
 
   Mutation: {
-    createParticipant: async (
-      parent,
-      { name, meetingId },
-      { models, secret }
-    ) => {
+    createParticipant: async (parent, { name, token }, { models, secret }) => {
+      const urlToken = jwt.verify(token, process.env.SECRET);
+      console.log("urlToken", urlToken);
+
       const participant = await models.Participant.create({
         id: uuidv4(),
         name,
-        MeetingId: meetingId,
+        MeetingId: urlToken.id,
       });
 
-      return { token: createParticipantToken(participant, secret, "30m") }; // expires in should'be a variable
+      return { token: createParticipantToken(participant, secret, "30m") }; // expires in should'be a variable (urlToken.endTime - urlToken.startTime)
     },
 
     updateAnswers: combineResolvers(

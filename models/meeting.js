@@ -19,12 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
         type: DataTypes.UUID,
-        validate: {
-          notNull: true,
-        },
-        defaultValue: sequelize.UUIDV4,
+        // validate: {
+        //   notNull: true,
+        // },
+        //defaultValue: sequelize.UUIDV4,
       },
       name: DataTypes.STRING,
+      token: DataTypes.STRING(1024),
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
     },

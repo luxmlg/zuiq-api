@@ -40,35 +40,35 @@ export default {
   },
   Mutation: {
     createQuiz: combineResolvers(
-      isAuthenticated,
-      async (parent, { name, text }, { models, me }) => {
+      //isAuthenticated,
+      async (parent, { name, schema }, { models, me }) => {
         const quiz = await models.Quiz.create({
           id: uuidv4(),
           name,
-          text,
-          UserId: me.id,
+          schema,
+          UserId: "21a34038-3308-4767-affd-115da41656a3", //me.id,
         });
 
         return quiz;
       }
     ),
     deleteQuiz: combineResolvers(
-      isAuthenticated,
-      isQuizOwner,
+      //isAuthenticated,
+      //isQuizOwner,
       async (parent, { id }, { models }) => {
         return await models.Quiz.destroy({ where: { id } });
       }
     ),
     updateQuiz: combineResolvers(
-      isAuthenticated,
-      isQuizOwner,
-      async(parent, {id, name, text}, {modles}) => {
+      //isAuthenticated,
+      //isQuizOwner,
+      async (parent, { id, name, schema }, { modles }) => {
         const quiz = await models.Quiz.findByPk(id);
-        if(quiz) {
+        if (quiz) {
           quiz.update({
             id,
             name,
-            text
+            schema,
           });
         }
 

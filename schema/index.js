@@ -29,6 +29,6 @@ export default [
   linkSchema,
   userSchema,
   quizSchema,
-  participantSchema,
   meetingSchema,
+  participantSchema,
 ];

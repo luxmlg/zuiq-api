@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Quiz.belongsTo(models.User);
+      Quiz.hasMany(models.Meeting);
       // define association here
     }
   }
@@ -24,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: sequelize.UUIDV4,
       },
       name: DataTypes.STRING,
-      text: DataTypes.STRING,
+      schema: DataTypes.JSON,
       createdAt: DataTypes.DATE,
     },
     {
@@ -32,5 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Quiz",
     }
   );
+
   return Quiz;
 };
