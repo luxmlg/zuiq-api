@@ -9,8 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Meeting.belongsTo(models.Quiz, { onDelete: "CASCADE" });
-      Meeting.hasMany(models.Participant);
+      Meeting.belongsTo(models.Quiz);
+      Meeting.belongsTo(models.User);
+      Meeting.hasMany(models.Participant, { onDelete: "CASCADE" });
     }
   }
   Meeting.init(

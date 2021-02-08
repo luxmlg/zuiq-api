@@ -41,12 +41,13 @@ export default {
   Mutation: {
     createQuiz: combineResolvers(
       //isAuthenticated,
-      async (parent, { name, schema }, { models, me }) => {
+      async (parent, { name, schema, answers }, { models, me }) => {
         const quiz = await models.Quiz.create({
           id: uuidv4(),
           name,
           schema,
-          UserId: "21a34038-3308-4767-affd-115da41656a3", //me.id,
+          answers,
+          UserId: "74a178e3-85d2-4708-9ced-85dc3a04f7dc", //me.id,
         });
 
         return quiz;
@@ -62,13 +63,14 @@ export default {
     updateQuiz: combineResolvers(
       //isAuthenticated,
       //isQuizOwner,
-      async (parent, { id, name, schema }, { modles }) => {
+      async (parent, { id, name, schema, answers }, { modles }) => {
         const quiz = await models.Quiz.findByPk(id);
         if (quiz) {
           quiz.update({
             id,
             name,
             schema,
+            answers,
           });
         }
 

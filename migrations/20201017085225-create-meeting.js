@@ -16,12 +16,30 @@ module.exports = {
       token: { type: Sequelize.STRING(1024) },
       startTime: { type: Sequelize.DATE },
       endTime: { type: Sequelize.DATE },
+
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      UserId: {
+        type: Sequelize.UUID,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+      },
       QuizId: {
         type: Sequelize.UUID,
         references: {
           model: "Quizzes",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
     });
   },

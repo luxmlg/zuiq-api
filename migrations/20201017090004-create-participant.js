@@ -13,7 +13,7 @@ module.exports = {
         //defaultValue: sequelize.UUIDV4,
       },
       name: { type: Sequelize.STRING },
-      answers: { type: Sequelize.STRING },
+      answers: { type: Sequelize.TEXT },
       hasCompleted: { type: Sequelize.BOOLEAN, defaultValue: false },
       MeetingId: {
         type: Sequelize.UUID,
@@ -21,6 +21,15 @@ module.exports = {
           model: "Meetings",
           key: "id",
         },
+        onDelete: "CASCADE",
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
   },

@@ -36,6 +36,7 @@ export default {
       const meeting = await models.Meeting.create({
         ...meetingObj,
         QuizId: quizId,
+        UserId: "74a178e3-85d2-4708-9ced-85dc3a04f7dc", // shouldn't be const
         token: await createUrlToken(meetingObj, secret),
       });
 
@@ -49,5 +50,16 @@ export default {
         return await models.Meeting.destroy({ where: { id } });
       }
     ),
+  },
+
+  Meeting: {
+    quiz: async (meeting, args, { models }) => {
+      return await models.Quiz.findByPk(meeting.QuizId);
+    },
+    participants: async (meeting, args, { models }) => {
+      return await models.Participant.findAll({
+        where: { MeetingId: meeting.id },
+      });
+    },
   },
 };

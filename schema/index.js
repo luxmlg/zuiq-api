@@ -2,8 +2,8 @@ import { gql } from "apollo-server-express";
 
 import userSchema from "./user";
 import quizSchema from "./quiz";
-import participantSchema from "./participant";
 import meetingSchema from "./meeting";
+import participantSchema from "./participant";
 
 const linkSchema = gql`
   scalar Date

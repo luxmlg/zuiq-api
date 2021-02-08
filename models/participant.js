@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Participant.belongsTo(models.Meeting, { onDelete: "CASCADE" });
+      Participant.belongsTo(models.Meeting);
     }
   }
   Participant.init(
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: sequelize.UUIDV4,
       },
       name: DataTypes.STRING,
-      answers: DataTypes.STRING,
+      answers: DataTypes.TEXT,
       hasCompleted: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {

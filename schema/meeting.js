@@ -22,6 +22,7 @@ export default gql`
     quiz: Quiz!
     name: String!
     token: String!
+    participants: [Participant]!
     startTime: Date!
     endTime: Date!
   }

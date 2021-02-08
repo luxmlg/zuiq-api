@@ -26,10 +26,11 @@ const getMe = async (req) => {
 };
 
 const getParticipantMe = async (req) => {
-  const token = req.headers["p-token"];
+  const token = req.headers["ptoken"];
 
   if (token) {
     try {
+      console.log(token);
       return await jwt.verify(token, process.env.SECRET);
     } catch (e) {
       throw new AuthenticationError("Meeting ended or Invalid Token.");
@@ -74,6 +75,7 @@ server.installSubscriptionHandlers(httpServer);
 
 const isTest = true;
 
+// remove alter
 sequelize.sync({ alter: isTest }).then(async () => {
   httpServer.listen({ port: 8000 }, () => {
     console.log("Apollo Server on http://localhost:8000/graphql");

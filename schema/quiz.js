@@ -7,9 +7,9 @@ export default gql`
   }
 
   extend type Mutation {
-    createQuiz(name: String!, schema: String): Quiz!
+    createQuiz(name: String!, schema: String, answers: String): Quiz!
     deleteQuiz(id: ID!): Boolean!
-    updateQuiz(id: ID!, name: String!, schema: String): Quiz!
+    updateQuiz(id: ID!, name: String!, schema: String, answers: String): Quiz!
 
     singleUpload(file: Upload!): File!
   }
@@ -18,6 +18,7 @@ export default gql`
     id: ID!
     name: String!
     schema: String
+    answers: String
     createdAt: Date!
     user: User!
   }

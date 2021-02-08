@@ -75,5 +75,12 @@ export default {
         },
       });
     },
+    meetings: async (user, args, { models }) => {
+      return await models.Meeting.findAll({
+        where: {
+          UserId: user.id,
+        },
+      });
+    },
   },
 };

@@ -5,6 +5,7 @@ export default gql`
   extend type Query {
     participants(meetingId: ID!): [Participant]!
     participant(id: ID!): Participant!
+    getParticipantUsingToken(token: String!): Participant!
   }
 
   extend type Mutation {
@@ -18,6 +19,6 @@ export default gql`
     meeting: Meeting
     name: String!
     hasCompleted: Boolean!
-    answers: String!
+    answers: String
   }
 `;

@@ -20,33 +20,19 @@ export default {
     },
 
     participant: async (parent, { id }, { models }) => {
-      const a = await models.Participant.findOne({
-        where: {
-          id,
-        },
-        include: {
-          model: models.Meeting,
-          // required: true,
-        },
-      });
-      console.log(a);
-      return a;
+      return models.Participant.findByPk(id);
+    },
 
-      return models.Participant.findOne({
-        where: {
-          id,
-        },
-        include: {
-          model: models.Meeting,
-          // required: true,
-        },
-      });
+    getParticipantUsingToken: async (parent, { token }, { models, secret }) => {
+      const participantToken = await jwt.verify(token, secret);
+      const participantId = participantToken.id;
+      return models.Participant.findByPk(participantId);
     },
   },
 
   Mutation: {
     createParticipant: async (parent, { name, token }, { models, secret }) => {
-      const urlToken = jwt.verify(token, process.env.SECRET);
+      const urlToken = jwt.verify(token, secret);
       console.log("urlToken", urlToken);
 
       const participant = await models.Participant.create({
@@ -81,5 +67,10 @@ export default {
         return participant;
       }
     ),
+  },
+  Participant: {
+    meeting: async (participant, args, { models }) => {
+      return await models.Meeting.findByPk(participant.MeetingId);
+    },
   },
 };

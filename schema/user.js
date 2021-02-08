@@ -18,6 +18,7 @@ export default gql`
     username: String!
     email: String!
     quizzes: [Quiz!]
+    meetings: [Meeting!]
     role: String!
   }
 `;
