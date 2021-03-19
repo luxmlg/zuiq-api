@@ -29,6 +29,19 @@ export default {
 			const generatedCode = generateCode();
 
 			try {
+				const verificationRecord = await models.Verification.findOne({ where: { email } });
+				console.log(verificationRecord);
+				if (verificationRecord) {
+					// onSuccess
+					if (verificationRecord.isVerified) {
+						console.log("Email already in use");
+						return {
+							success: false,
+							message: "Email already in use",
+						};
+					}
+				}
+
 				await models.Verification.destroy({ where: { email } });
 
 				const createdVerification = await models.Verification.create({
@@ -79,6 +92,8 @@ export default {
 			{ models, secret },
 		) => {
 			try {
+				// check if the name contains any characters or is emtpy
+
 				const foundVerification = await models.Verification.findOne({
 					where: { email },
 					order: [["createdAt", "DESC"]],
@@ -88,6 +103,15 @@ export default {
 					return {
 						success: false,
 						message: "Could not find verification record",
+					};
+				}
+
+				if (foundVerification.isVerified) {
+					// test this
+					return {
+						success: false,
+						message: "Participant is already verified",
+						token: null,
 					};
 				}
 
@@ -101,6 +125,8 @@ export default {
 					});
 
 					const participantToken = createParticipantToken(participant, secret, "30m");
+
+					foundVerification.update({ isVerified: true });
 
 					return {
 						success: true,
