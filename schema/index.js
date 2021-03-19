@@ -4,31 +4,38 @@ import userSchema from "./user";
 import quizSchema from "./quiz";
 import meetingSchema from "./meeting";
 import participantSchema from "./participant";
+import verificationSchema from "./verification";
 
 const linkSchema = gql`
-  scalar Date
+	scalar Date
 
-  type Token { #need to find a better place for this
-    token: String!
-  }
+	type Token { #need to find a better place for this
+		token: String!
+	}
 
-  type Query {
-    _: Boolean
-  }
+	type RequestResponse {
+		success: Boolean
+		message: String
+	}
 
-  type Mutation {
-    _: Boolean
-  }
+	type Query {
+		_: Boolean
+	}
 
-  type Subscription {
-    _: Boolean
-  }
+	type Mutation {
+		_: Boolean
+	}
+
+	type Subscription {
+		_: Boolean
+	}
 `;
 
 export default [
-  linkSchema,
-  userSchema,
-  quizSchema,
-  meetingSchema,
-  participantSchema,
+	linkSchema,
+	userSchema,
+	quizSchema,
+	meetingSchema,
+	participantSchema,
+	verificationSchema,
 ];
