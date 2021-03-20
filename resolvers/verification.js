@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 
 import { createParticipantToken } from "./participant";
+import { isRequiredInputField } from "graphql";
 
 export default {
 	Query: {},
@@ -92,6 +93,20 @@ export default {
 			{ models, secret },
 		) => {
 			try {
+				if (email == "") {
+					return {
+						success: false,
+						message: "Email can't be an empty string",
+					};
+				}
+
+				if (name == "") {
+					return {
+						success: false,
+						message: "Name can't be an empty string",
+					};
+				}
+
 				// check if the name contains any characters or is emtpy
 
 				const foundVerification = await models.Verification.findOne({
