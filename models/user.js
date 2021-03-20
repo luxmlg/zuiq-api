@@ -1,6 +1,8 @@
 "use strict";
 const { Model } = require("sequelize");
-import bcrypt from "bcrypt";
+//import bcrypt from "bcrypt";
+const bcrypt = require("bcrypt");
+//import { Sequelize } from ".";
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -12,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Quiz, { onDelete: "CASCADE" });
+      User.hasMany(models.Meeting, { onDelete: "CASCADE" });
     }
   }
 
@@ -31,6 +34,15 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
+      id: {
+        primaryKey: true,
+        allowNull: false,
+        type: DataTypes.UUID,
+        validate: {
+          notNull: true,
+        },
+        defaultValue: sequelize.UUIDV4,
+      },
       username: {
         type: DataTypes.STRING,
         unqiue: true,
@@ -55,6 +67,9 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
           len: [7, 42],
         },
+      },
+      role: {
+        type: DataTypes.STRING,
       },
     },
     {

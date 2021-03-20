@@ -2,21 +2,40 @@ import { gql } from "apollo-server-express";
 
 import userSchema from "./user";
 import quizSchema from "./quiz";
+import meetingSchema from "./meeting";
+import participantSchema from "./participant";
+import verificationSchema from "./verification";
 
 const linkSchema = gql`
-  scalar Date
+	scalar Date
 
-  type Query {
-    _: Boolean
-  }
+	type Token { #need to find a better place for this
+		token: String!
+	}
 
-  type Mutation {
-    _: Boolean
-  }
+	type RequestResponse {
+		success: Boolean
+		message: String
+	}
 
-  type Subscription {
-    _: Boolean
-  }
+	type Query {
+		_: Boolean
+	}
+
+	type Mutation {
+		_: Boolean
+	}
+
+	type Subscription {
+		_: Boolean
+	}
 `;
 
-export default [linkSchema, userSchema, quizSchema];
+export default [
+	linkSchema,
+	userSchema,
+	quizSchema,
+	meetingSchema,
+	participantSchema,
+	verificationSchema,
+];

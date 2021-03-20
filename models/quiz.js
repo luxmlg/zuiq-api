@@ -9,12 +9,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Quiz.belongsTo(models.User);
+      Quiz.hasMany(models.Meeting, { onDelete: "CASCADE" });
       // define association here
     }
   }
   Quiz.init(
     {
-      text: DataTypes.STRING,
+      id: {
+        primaryKey: true,
+        allowNull: false,
+        type: DataTypes.UUID,
+        validate: {
+          notNull: true,
+        },
+        defaultValue: sequelize.UUIDV4,
+      },
+      name: DataTypes.STRING,
+      schema: DataTypes.TEXT,
+      answers: DataTypes.TEXT,
       createdAt: DataTypes.DATE,
     },
     {
@@ -22,5 +34,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Quiz",
     }
   );
+
   return Quiz;
 };
