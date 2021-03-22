@@ -1,5 +1,6 @@
 import { combineResolvers } from "graphql-resolvers";
 import { v4 as uuidv4 } from "uuid";
+import { cloudinary } from "../utils/cloudinary";
 
 import { isAuthenticated, isQuizOwner } from "./authorization";
 
@@ -52,6 +53,23 @@ export default {
 				return quiz;
 			},
 		),
+		uploadImage: async (parent, { image }, { models }) => {
+			try {
+				console.log(image);
+				const uploadResponse = await cloudinary.uploader.upload(image, {
+					upload_preset: "ml_default",
+				});
+				console.log(uploadResponse);
+
+				return {
+					success: true,
+					message: "Image successfully uploaded",
+					path: uploadResponse.url,
+				};
+			} catch {
+				return { success: false, message: "Unable to upload image", path: null };
+			}
+		},
 	},
 	Quiz: {
 		user: async (quiz, args, { models }) => {
