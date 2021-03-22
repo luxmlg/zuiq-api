@@ -1,31 +1,8 @@
 import { combineResolvers } from "graphql-resolvers";
-import { createWriteStream } from "fs";
 import { v4 as uuidv4 } from "uuid";
+import { cloudinary } from "../utils/cloudinary";
 
 import { isAuthenticated, isQuizOwner } from "./authorization";
-
-const uploadDir = `images`;
-
-const storeUpload = async ({ stream, filename }) => {
-	const id = uuidv4();
-	const path = `${uploadDir}/${id}-${filename}`;
-
-	return new Promise((resolve, reject) =>
-		stream
-			.pipe(createWriteStream(path))
-			.on("finish", () => resolve({ id, path }))
-			.on("error", reject),
-	);
-};
-
-const recordFile = (file) => models.Image.create(file);
-
-const processUpload = async (upload) => {
-	const { createReadStream, filename, mimetype, encoding } = await upload;
-	const stream = createReadStream();
-	const { id, path } = await storeUpload({ stream, filename });
-	return recordFile({ id, filename, mimetype, encoding, path });
-};
 
 export default {
 	Query: {
@@ -46,7 +23,7 @@ export default {
 					name,
 					schema,
 					answers,
-					UserId: "74a178e3-85d2-4708-9ced-85dc3a04f7dc", //me.id,
+					UserId: "1a9f83bd-4c64-4e8f-85a3-d29a1b8f5999", //me.id,
 				});
 
 				return quiz;
@@ -76,7 +53,23 @@ export default {
 				return quiz;
 			},
 		),
-		singleUpload: (parent, { file }) => processUpload(file),
+		uploadImage: async (parent, { image }, { models }) => {
+			try {
+				console.log(image);
+				const uploadResponse = await cloudinary.uploader.upload(image, {
+					upload_preset: "ml_default",
+				});
+				console.log(uploadResponse);
+
+				return {
+					success: true,
+					message: "Image successfully uploaded",
+					path: uploadResponse.url,
+				};
+			} catch {
+				return { success: false, message: "Unable to upload image", path: null };
+			}
+		},
 	},
 	Quiz: {
 		user: async (quiz, args, { models }) => {
