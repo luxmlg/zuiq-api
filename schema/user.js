@@ -8,7 +8,7 @@ export default gql`
 	}
 
 	extend type Mutation {
-		googleAuthentication(authResponse: String): Token
+		googleAuthentication(tokenId: String): Token
 		signUp(username: String!, email: String!, password: String!): Token!
 		signIn(login: String!, password: String!): Token!
 		deleteUser(id: ID!): Boolean!
