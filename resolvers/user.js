@@ -35,11 +35,9 @@ export default {
 
 	Mutation: {
 		googleAuthentication: async (parent, { tokenId }, { models, secret }) => {
-			console.log(client.verifyIdToken);
-
 			const ticket = await client.verifyIdToken({
 				idToken: tokenId,
-				audience: process.env.GOOGLE_CLIEND_ID,
+				audience: process.env.GOOGLE_CLIENT_ID,
 			});
 
 			const payload = ticket.getPayload();
