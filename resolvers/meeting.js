@@ -24,6 +24,63 @@ export default {
 		meeting: async (parent, { id }, { models }) => {
 			return await models.Meeting.findByPk(id);
 		},
+		validateMeeting: async (parent, { meetingToken, participantToken }, { models, secret }) => {
+			const decodedMeetingToken = jwt.verify(meetingToken, secret);
+
+			if (participantToken) {
+				const decodedParticipantToken = jwt.verify(participantToken, secret);
+				const foundParticipant = await models.Participant.findOne({
+					where: { id: decodedParticipantToken.id },
+				});
+
+				if (!foundParticipant) {
+					return {
+						success: false,
+						message: "Participant not found",
+						action: "pass",
+					};
+				}
+
+				if (foundParticipant.MeetingId !== decodedMeetingToken.id) {
+					return {
+						success: false,
+						message: "Current participant token does not correspond to this meeting",
+						action: "deauthenticate",
+					};
+				}
+			}
+
+			const foundMeeting = await models.Meeting.findOne({
+				where: {
+					id: decodedMeetingToken.id,
+				},
+			});
+
+			if (!foundMeeting) {
+				return {
+					success: false,
+					message: "Meeting not found",
+					action: "pass",
+				};
+			}
+
+			const nowTime = Date.now();
+			const meetingStartTime = new Date(foundMeeting.startTime);
+
+			if (nowTime < meetingStartTime) {
+				return {
+					success: false,
+					message: "Meeting has not started yet",
+					action: "error",
+				};
+			}
+
+			return {
+				success: true,
+				message: "No issues with this meeting",
+				action: "pass",
+			};
+		},
 	},
 
 	Mutation: {
