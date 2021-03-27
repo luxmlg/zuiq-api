@@ -27,6 +27,15 @@ module.exports = (sequelize, DataTypes) => {
 				},
 				defaultValue: sequelize.UUIDV4,
 			},
+			email: {
+				type: DataTypes.STRING,
+				unique: false,
+				allowNull: false,
+				validate: {
+					notEmpty: true,
+					isEmail: true,
+				},
+			},
 			name: DataTypes.STRING,
 			answers: DataTypes.TEXT,
 			hasCompleted: { type: DataTypes.BOOLEAN, defaultValue: false },
