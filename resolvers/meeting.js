@@ -41,7 +41,7 @@ export default {
 					};
 				}
 
-				if (foundParticipant.MeetingId !== decodedMeetingToken.id) {
+				if (foundParticipant.meetingId !== decodedMeetingToken.id) {
 					return {
 						success: false,
 						message: "Current participant token does not correspond to this meeting",
@@ -111,7 +111,7 @@ export default {
 		},
 		participants: async (meeting, args, { models }) => {
 			return await models.Participant.findAll({
-				where: { MeetingId: meeting.id },
+				where: { meetingId: meeting.id },
 			});
 		},
 	},

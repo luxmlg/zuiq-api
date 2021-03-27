@@ -136,7 +136,8 @@ export default {
 					const participant = await models.Participant.create({
 						id: uuidv4(),
 						name,
-						MeetingId: urlToken.id,
+						meetingId: urlToken.id,
+						email,
 					});
 
 					const participantToken = createParticipantToken(participant, secret, "30m");

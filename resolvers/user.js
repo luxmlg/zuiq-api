@@ -87,14 +87,14 @@ export default {
 		quizzes: async (user, args, { models }) => {
 			return await models.Quiz.findAll({
 				where: {
-					UserId: user.id,
+					userId: user.id,
 				},
 			});
 		},
 		meetings: async (user, args, { models }) => {
 			return await models.Meeting.findAll({
 				where: {
-					UserId: user.id,
+					userId: user.id,
 				},
 			});
 		},
