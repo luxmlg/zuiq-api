@@ -17,7 +17,7 @@ export default {
 		meetings: async (parent, { userId }, { models }) => {
 			return await models.Meeting.findAll({
 				// where: {
-				//   UserId: userId,
+				//   userId,
 				// },
 			});
 		},
@@ -88,8 +88,8 @@ export default {
 			const meetingObj = { id: uuidv4(), name, startTime, endTime };
 			const meeting = await models.Meeting.create({
 				...meetingObj,
-				QuizId: quizId,
-				UserId: "25cb04e5-3339-45a6-b8c3-1a8842b0dcd4", // shouldn't be const
+				quizId,
+				userId: "d7a94282-9462-4f6d-9f51-db918dfdf900", // shouldn't be const
 				token: await createUrlToken(meetingObj, secret),
 			});
 
@@ -107,7 +107,7 @@ export default {
 
 	Meeting: {
 		quiz: async (meeting, args, { models }) => {
-			return await models.Quiz.findByPk(meeting.QuizId);
+			return await models.Quiz.findByPk(meeting.quizId);
 		},
 		participants: async (meeting, args, { models }) => {
 			return await models.Participant.findAll({

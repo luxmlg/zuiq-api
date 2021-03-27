@@ -23,7 +23,7 @@ export default {
 					name,
 					schema,
 					answers,
-					UserId: "25cb04e5-3339-45a6-b8c3-1a8842b0dcd4", //me.id,
+					userId: "d7a94282-9462-4f6d-9f51-db918dfdf900", //me.id,
 				});
 
 				return quiz;
@@ -73,7 +73,7 @@ export default {
 	},
 	Quiz: {
 		user: async (quiz, args, { models }) => {
-			return await models.User.findByPk(quiz.UserId);
+			return await models.User.findByPk(quiz.userId);
 		},
 	},
 };

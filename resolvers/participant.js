@@ -14,7 +14,7 @@ export default {
 		participants: async (parent, { meetingId }, { models }) => {
 			return models.Participant.findAll({
 				where: {
-					MeetingId: meetingId,
+					meetingId,
 				},
 			});
 		},
@@ -38,7 +38,7 @@ export default {
 			const participant = await models.Participant.create({
 				id: uuidv4(),
 				name,
-				MeetingId: urlToken.id,
+				meetingId: urlToken.id,
 			});
 
 			return { token: createParticipantToken(participant, secret, "30m") }; // expires in should'be a variable (urlToken.endTime - urlToken.startTime)
@@ -70,7 +70,7 @@ export default {
 	},
 	Participant: {
 		meeting: async (participant, args, { models }) => {
-			return await models.Meeting.findByPk(participant.MeetingId);
+			return await models.Meeting.findByPk(participant.meetingId);
 		},
 	},
 };
