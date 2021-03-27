@@ -10,18 +10,12 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			Meeting.belongsTo(models.Quiz, {
-				foreignKey: {
-					name: "quizId",
-					field: "quizId",
-				},
+				foreignKey: "quizId",
 			});
 			Meeting.belongsTo(models.User, {
-				foreignKey: {
-					name: "userId",
-					field: "userId",
-				},
+				foreignKey: "userId",
 			});
-			Meeting.hasMany(models.Participant, { onDelete: "CASCADE" });
+			Meeting.hasMany(models.Participant, { foreignKey: "meetingId", onDelete: "CASCADE" });
 		}
 	}
 	Meeting.init(
