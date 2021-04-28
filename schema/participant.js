@@ -9,7 +9,7 @@ export default gql`
 	}
 
 	extend type Mutation {
-		createParticipant(name: String!, token: String!): TokenResponse!
+		createParticipant(name: String!, email: String!, token: String!): TokenResponse!
 		updateAnswers(answers: String!): RequestResponse!
 		completeMeeting: RequestResponse!
 	}

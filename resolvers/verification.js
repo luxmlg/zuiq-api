@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
+import ParticipantResolvers from "./participant";
 
 import { createParticipantToken } from "./participant";
 import { isRequiredInputField } from "graphql";
@@ -137,30 +138,15 @@ export default {
 				}
 
 				if (foundVerification.code === code) {
-					const urlToken = jwt.verify(meetingToken, secret);
-
-					const participant = await models.Participant.create({
-						id: uuidv4(),
-						name,
-						meetingId: urlToken.id,
-						email,
-					});
-
-					const participantToken = createParticipantToken(participant, secret, "30m");
+					const createParticipantResponse = ParticipantResolvers.Mutation.createParticipant(
+						{},
+						{ email, name, token: meetingToken },
+						{ models, secret },
+					);
 
 					foundVerification.update({ isVerified: true });
 
-					return {
-						success: true,
-						message: "Participant verification code is correct",
-						token: participantToken,
-					};
-				} else {
-					return {
-						success: false,
-						message: "Participant verification code is incorrect",
-						token: null,
-					};
+					return createParticipantResponse;
 				}
 			} catch (error) {
 				return {

@@ -104,7 +104,7 @@ export default {
 	},
 
 	Mutation: {
-		createParticipant: async (parent, { name, token }, { models, secret }) => {
+		createParticipant: async (parent, { name, token, email }, { models, secret }) => {
 			try {
 				const urlToken = jwt.verify(token, secret);
 				console.log("urlToken", urlToken);
@@ -120,7 +120,10 @@ export default {
 					id: uuidv4(),
 					name,
 					meetingId: urlToken.id,
+					email,
 				});
+
+				console.log("here");
 
 				if (!participant) {
 					return {
@@ -130,7 +133,21 @@ export default {
 					};
 				}
 
-				const participantToken = createParticipantToken(participant, secret, "30m"); // expires in should'be a variable (urlToken.endTime - urlToken.startTime)
+				const meeting = await models.Meeting.findByPk(urlToken.id);
+				if (!meeting) {
+					return {
+						success: false,
+						message: "Couldn't find the corresponding meeting",
+						token: null,
+					};
+				}
+
+				const meetingDuration = meeting.endTime - meeting.startTime;
+				const expiresIn = `${meetingDuration}ms`;
+				console.log(meeting);
+				console.log(expiresIn);
+				const participantToken = createParticipantToken(participant, secret, expiresIn);
+
 				if (!participantToken) {
 					return {
 						success: false,
