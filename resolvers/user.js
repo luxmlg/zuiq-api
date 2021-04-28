@@ -18,68 +18,104 @@ const createUserToken = async (user, secret, expiresIn) => {
 export default {
 	Query: {
 		me: async (parent, args, { models, me }) => {
-			if (!me) {
-				return null;
+			try {
+				if (!me) {
+					return {
+						success: false,
+						message: "User not authenticated or token out of date",
+						user: null,
+					};
+				}
+
+				const user = await models.User.findByPk(me.id);
+
+				if (!user) {
+					return {
+						success: false,
+						message: "Couldn't find user in database",
+						user: null,
+					};
+				}
+
+				return {
+					success: true,
+					message: "Me user retrieved successfully",
+					user,
+				};
+			} catch (error) {
+				return {
+					success: false,
+					message: "Couldn't retrieve me user",
+					user: null,
+				};
 			}
-
-			return await models.User.findByPk(me.id);
-		},
-		users: async (parent, args, { models }) => {
-			return await models.User.findAll();
-		},
-
-		user: async (parent, { id }, { models }) => {
-			return await models.User.findByPk(id);
 		},
 	},
 
 	Mutation: {
 		googleAuthentication: async (parent, { tokenId }, { models, secret }) => {
-			const ticket = await client.verifyIdToken({
-				idToken: tokenId,
-				audience: process.env.GOOGLE_CLIENT_ID,
-			});
+			try {
+				const ticket = await client.verifyIdToken({
+					idToken: tokenId,
+					audience: process.env.GOOGLE_CLIENT_ID,
+				});
 
-			const payload = ticket.getPayload();
-			const { name, email } = payload;
-			console.log(payload);
+				if (!ticket) {
+					return {
+						success: false,
+						message: "Couldn't verify the IdToken",
+						token: null,
+					};
+				}
 
-			const [user] = await models.User.findOrCreate({
-				where: { email },
-				defaults: { id: uuidv4(), username: name, password: "jubalubaikakuna123" },
-			});
+				const payload = ticket.getPayload();
+				const { name, email } = payload;
 
-			return { token: createUserToken(user, secret, "30m") };
-		},
+				const [user] = await models.User.findOrCreate({
+					where: { email },
+					defaults: { id: uuidv4(), username: name, password: "jubalubaikakuna123" },
+				});
 
-		signUp: async (parent, { username, email, password }, { models, secret }) => {
-			const user = await models.User.create({
-				id: uuidv4(),
-				username,
-				email,
-				password,
-			});
+				if (!user) {
+					return {
+						success: false,
+						message: "Couldn't create or find user in database",
+						token: null,
+					};
+				}
 
-			return { token: createUserToken(user, secret, "30m") };
-		},
+				const token = createUserToken(user, secret, "2h");
 
-		signIn: async (parent, { login, password }, { models, secret }) => {
-			const user = await models.User.findByLogin(login);
-
-			if (!user) {
-				throw new UserInputError("No user found with this credentials.");
+				return { success: true, message: "Google authentication successfull", token };
+			} catch (error) {
+				return {
+					success: false,
+					message: "Something went wrong while trying to authenticate user with google",
+					token: null,
+				};
 			}
-			const isValid = await user.validatePassword(password);
-
-			if (!isValid) {
-				throw new AuthenticationError("Invalid password.");
-			}
-
-			return { token: createUserToken(user, secret, "30m") };
 		},
 
 		deleteUser: combineResolvers(isAdmin, async (parent, { id }, { models }) => {
-			return await models.User.destroy({ where: { id } });
+			try {
+				const userDeleted = await models.User.destroy({ where: { id } });
+				if (!userDeleted) {
+					return {
+						success: false,
+						message: "Couldn't delete user",
+					};
+				}
+
+				return {
+					success: true,
+					message: "User deleted successfully",
+				};
+			} catch (error) {
+				return {
+					success: false,
+					message: "Something went wrong while deleting user",
+				};
+			}
 		}),
 	},
 

@@ -2,16 +2,12 @@ import { gql } from "apollo-server-express";
 
 export default gql`
 	extend type Query {
-		me: User
-		users: [User!]
-		user(id: ID!): User
+		me: UserResponse
 	}
 
 	extend type Mutation {
-		googleAuthentication(tokenId: String): Token
-		signUp(username: String!, email: String!, password: String!): Token!
-		signIn(login: String!, password: String!): Token!
-		deleteUser(id: ID!): Boolean!
+		googleAuthentication(tokenId: String): TokenResponse!
+		deleteUser(id: ID!): RequestResponse!
 	}
 
 	type User {
@@ -21,5 +17,11 @@ export default gql`
 		quizzes: [Quiz!]
 		meetings: [Meeting!]
 		role: String!
+	}
+
+	type UserResponse {
+		success: Boolean
+		message: String
+		user: User
 	}
 `;

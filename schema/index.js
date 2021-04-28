@@ -18,6 +18,12 @@ const linkSchema = gql`
 		message: String
 	}
 
+	type TokenResponse {
+		success: Boolean
+		message: String
+		token: String
+	}
+
 	type Query {
 		_: Boolean
 	}

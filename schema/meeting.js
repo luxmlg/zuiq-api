@@ -3,20 +3,37 @@ import { gql } from "apollo-server-express";
 // meetings should be fetched using user id
 export default gql`
 	extend type Query {
-		meetings: [Meeting]!
-		meeting(id: ID!): Meeting!
+		meetings: MeetingsResponse!
+		meeting(id: ID!): MeetingResponse!
 		validateMeeting(meetingToken: String, participantToken: String): ValidateMeetingResponse!
 	}
 
 	extend type Mutation {
-		createMeeting(name: String!, quizId: ID!, startTime: Date!, endTime: Date!): Meeting!
-		deleteMeeting(id: ID!): Boolean!
+		createMeeting(
+			name: String!
+			quizId: ID!
+			startTime: Date!
+			endTime: Date!
+		): MeetingResponse!
+		deleteMeeting(id: ID!): RequestResponse!
 	}
 
 	type ValidateMeetingResponse {
 		success: Boolean
 		message: String
 		action: String
+	}
+
+	type MeetingResponse {
+		success: Boolean
+		message: String
+		meeting: Meeting
+	}
+
+	type MeetingsResponse {
+		success: Boolean
+		message: String
+		meetings: [Meeting]!
 	}
 
 	type Meeting {

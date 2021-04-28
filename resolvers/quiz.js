@@ -6,51 +6,152 @@ import { isAuthenticated, isQuizOwner } from "./authorization";
 
 export default {
 	Query: {
-		quizzes: async (parent, args, { models }) => {
-			return await models.Quiz.findAll();
+		quizzes: async (parent, args, { me, models }) => {
+			try {
+				const quizzes = await models.Quiz.findAll({
+					where: {
+						userId: me.id,
+					},
+				});
+
+				if (!quizzes) {
+					return {
+						success: false,
+						message: "Couln't retrieve the quizzes from database",
+						quizzes: null,
+					};
+				}
+
+				return {
+					success: true,
+					message: "Quizzes retrieved successfully",
+					quizzes,
+				};
+			} catch (error) {
+				return {
+					success: false,
+					message: "Couln't retrieve the quizzes",
+					quizzes: null,
+				};
+			}
 		},
 
 		quiz: async (parent, { id }, { models }) => {
-			return await models.Quiz.findByPk(id);
+			try {
+				const quiz = await models.Quiz.findByPk(id);
+
+				if (!quiz) {
+					return {
+						success: false,
+						message: "Couln't retrieve the quiz from database",
+						quiz: null,
+					};
+				}
+
+				return {
+					success: true,
+					message: "Quiz retrieved successfully",
+					quiz,
+				};
+			} catch (error) {
+				return {
+					success: false,
+					message: "Couln't retrieve the quiz",
+					quiz: null,
+				};
+			}
 		},
 	},
 	Mutation: {
 		createQuiz: combineResolvers(
-			//isAuthenticated,
+			isAuthenticated,
 			async (parent, { name, schema, answers }, { models, me }) => {
-				const quiz = await models.Quiz.create({
-					id: uuidv4(),
-					name,
-					schema,
-					answers,
-					userId: "d7a94282-9462-4f6d-9f51-db918dfdf900", //me.id,
-				});
+				try {
+					const quiz = await models.Quiz.create({
+						id: uuidv4(),
+						name,
+						schema,
+						answers,
+						userId: me.id,
+					});
 
-				return quiz;
+					if (!quiz) {
+						return {
+							success: true,
+							message: "Couldn't create quiz in database",
+							quiz,
+						};
+					}
+
+					return {
+						success: true,
+						message: "Quiz created successfully",
+						quiz,
+					};
+				} catch (error) {
+					return {
+						success: true,
+						message: "Couldn't create quiz",
+						quiz,
+					};
+				}
 			},
 		),
 		deleteQuiz: combineResolvers(
-			//isAuthenticated,
-			//isQuizOwner,
+			isAuthenticated,
+			isQuizOwner,
 			async (parent, { id }, { models }) => {
-				return await models.Quiz.destroy({ where: { id } });
+				try {
+					const quizDeleted = await models.Quiz.destroy({ where: { id } });
+
+					if (!quizDeleted) {
+						return {
+							success: false,
+							message: "Couldn't delete the quiz",
+						};
+					}
+
+					return {
+						success: true,
+						message: "Quiz deleted successfully",
+					};
+				} catch (error) {
+					return {
+						success: false,
+						message: "Couldn't delete the quiz",
+					};
+				}
 			},
 		),
 		updateQuiz: combineResolvers(
-			//isAuthenticated,
-			//isQuizOwner,
+			isAuthenticated,
+			isQuizOwner,
 			async (parent, { id, name, schema, answers }, { models }) => {
-				const quiz = await models.Quiz.findByPk(id);
-				if (quiz) {
+				try {
+					const quiz = await models.Quiz.findByPk(id);
+					if (!quiz) {
+						return {
+							success: false,
+							message: "Couldn't find the quiz in database",
+							quiz: null,
+						};
+					}
+
 					quiz.update({
 						id,
 						name,
 						schema,
 						answers,
 					});
-				}
 
-				return quiz;
+					return { success: true, message: "Quiz updated successfully", quiz };
+				} catch (error) {
+					return {
+						success: false,
+						message: "Couldn't update the quiz",
+						quiz: null,
+					};
+				}
 			},
 		),
 		uploadImage: async (parent, { image }, { models }) => {

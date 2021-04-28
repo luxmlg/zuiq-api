@@ -75,7 +75,10 @@ export default {
 
 				transporter.sendMail(mailOptions, (err, data) => {
 					if (err) {
-						console.log(err);
+						return {
+							success: false,
+							message: "Couldn't send mail to participant",
+						};
 					}
 				});
 
@@ -84,7 +87,10 @@ export default {
 					message: "Successfully sent verification code to participant",
 				};
 			} catch (error) {
-				console.log(error);
+				return {
+					success: false,
+					message: "Something went wrong while trying to send code to participant emial",
+				};
 			}
 		},
 		verifyParticipantCode: async (
@@ -157,7 +163,11 @@ export default {
 					};
 				}
 			} catch (error) {
-				console.log(error);
+				return {
+					success: false,
+					message: "Something went wrong while trying to verify participants code",
+					token: null,
+				};
 			}
 		},
 	},
