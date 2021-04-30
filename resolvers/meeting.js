@@ -13,7 +13,7 @@ const createUrlToken = async (meeting, secret) => {
 
 export default {
 	Query: {
-		meetings: async (parent, args, { me, models }) => {
+		getMeetings: async (parent, args, { me, models }) => {
 			try {
 				const meetings = await models.Meeting.findAll({
 					where: {
@@ -42,7 +42,7 @@ export default {
 				};
 			}
 		},
-		meeting: async (parent, { id }, { models }) => {
+		getMeeting: async (parent, { id }, { models }) => {
 			try {
 				const meeting = await models.Meeting.findByPk(id);
 				if (!meeting) {

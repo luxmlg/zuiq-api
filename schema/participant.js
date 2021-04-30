@@ -3,8 +3,8 @@ import { gql } from "apollo-server-express";
 // needs query participantMeeting: Meeting!
 export default gql`
 	extend type Query {
-		participants(meetingId: ID!): ParticipantsResponse!
-		participant(id: ID!): ParticipantResponse!
+		getParticipants(meetingId: ID!): ParticipantsResponse!
+		getParticipant(id: ID!): ParticipantResponse!
 		getParticipantUsingToken(token: String!): ParticipantResponse!
 	}
 

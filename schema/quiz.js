@@ -2,8 +2,8 @@ import { gql } from "apollo-server-express";
 
 export default gql`
 	extend type Query {
-		quizzes: QuizzesResponse!
-		quiz(id: ID!): QuizResponse!
+		getQuizzes: QuizzesResponse!
+		getQuiz(id: ID!): QuizResponse!
 	}
 
 	extend type Mutation {
@@ -38,6 +38,6 @@ export default gql`
 	type QuizzesResponse {
 		success: Boolean
 		message: String
-		quizzes: [Quiz]!
+		quizzes: [Quiz]
 	}
 `;

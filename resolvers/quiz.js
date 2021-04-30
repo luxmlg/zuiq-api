@@ -6,7 +6,7 @@ import { isAuthenticated, isQuizOwner } from "./authorization";
 
 export default {
 	Query: {
-		quizzes: async (parent, args, { me, models }) => {
+		getQuizzes: async (parent, args, { me, models }) => {
 			try {
 				const quizzes = await models.Quiz.findAll({
 					where: {
@@ -36,7 +36,7 @@ export default {
 			}
 		},
 
-		quiz: async (parent, { id }, { models }) => {
+		getQuiz: async (parent, { id }, { models }) => {
 			try {
 				const quiz = await models.Quiz.findByPk(id);
 

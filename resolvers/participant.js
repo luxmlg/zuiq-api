@@ -11,7 +11,7 @@ export const createParticipantToken = async (participant, secret, expiresIn) => 
 
 export default {
 	Query: {
-		participants: async (parent, { meetingId }, { models }) => {
+		getParticipants: async (parent, { meetingId }, { models }) => {
 			try {
 				const participants = models.Participant.findAll({
 					where: {
@@ -41,7 +41,7 @@ export default {
 			}
 		},
 
-		participant: async (parent, { id }, { models }) => {
+		getParticipant: async (parent, { id }, { models }) => {
 			try {
 				const participant = models.Participant.findByPk(id);
 
