@@ -2,14 +2,14 @@ import { gql } from "apollo-server-express";
 
 export default gql`
 	extend type Query {
-		quizzes: [Quiz!]!
-		quiz(id: ID!): Quiz!
+		getQuizzes: QuizzesResponse!
+		getQuiz(id: ID!): QuizResponse!
 	}
 
 	extend type Mutation {
-		createQuiz(name: String!, schema: String, answers: String): Quiz!
-		deleteQuiz(id: ID!): Boolean!
-		updateQuiz(id: ID!, name: String!, schema: String, answers: String): Quiz!
+		createQuiz(name: String!, schema: String, answers: String): QuizResponse!
+		deleteQuiz(id: ID!): RequestResponse!
+		updateQuiz(id: ID!, name: String!, schema: String, answers: String): QuizResponse!
 
 		uploadImage(image: String!): UploadImageResponse!
 	}
@@ -27,5 +27,17 @@ export default gql`
 		success: Boolean
 		message: String
 		path: String
+	}
+
+	type QuizResponse {
+		success: Boolean
+		message: String
+		quiz: Quiz
+	}
+
+	type QuizzesResponse {
+		success: Boolean
+		message: String
+		quizzes: [Quiz]
 	}
 `;

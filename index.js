@@ -20,7 +20,8 @@ const getMe = async (req) => {
 		try {
 			return await jwt.verify(token, process.env.SECRET);
 		} catch (e) {
-			throw new AuthenticationError("Your session expired. Sign in again.");
+			return null;
+			//throw new AuthenticationError("Your session expired. Sign in again.");
 		}
 	}
 };
@@ -74,11 +75,6 @@ server.applyMiddleware({
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-const isTest = true;
-
-// remove alter
-sequelize.sync({ alter: isTest }).then(async () => {
-	httpServer.listen({ port: 8000 }, () => {
-		console.log("Apollo Server on http://localhost:8000/graphql");
-	});
+httpServer.listen({ port: 8000 }, () => {
+	console.log("Apollo Server on http://localhost:8000/graphql");
 });

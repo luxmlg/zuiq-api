@@ -2,23 +2,36 @@ import { gql } from "apollo-server-express";
 
 // needs query participantMeeting: Meeting!
 export default gql`
-  extend type Query {
-    participants(meetingId: ID!): [Participant]!
-    participant(id: ID!): Participant!
-    getParticipantUsingToken(token: String!): Participant!
-  }
+	extend type Query {
+		getParticipants(meetingId: ID!): ParticipantsResponse!
+		getParticipant(id: ID!): ParticipantResponse!
+		getParticipantUsingToken(token: String!): ParticipantResponse!
+	}
 
-  extend type Mutation {
-    createParticipant(name: String!, token: String!): Token!
-    updateAnswers(answers: String!): Participant
-    completeMeeting: Participant
-  }
+	extend type Mutation {
+		createParticipant(name: String!, email: String!, token: String!): TokenResponse!
+		updateAnswers(answers: String!): RequestResponse!
+		completeMeeting: RequestResponse!
+	}
 
-  type Participant {
-    id: ID!
-    meeting: Meeting
-    name: String!
-    hasCompleted: Boolean!
-    answers: String
-  }
+	type ParticipantResponse {
+		success: Boolean
+		message: String
+		participant: Participant
+	}
+
+	type ParticipantsResponse {
+		success: Boolean
+		message: String
+		participants: [Participant]!
+	}
+
+	type Participant {
+		id: ID!
+		meeting: Meeting
+		name: String!
+		email: String!
+		hasCompleted: Boolean!
+		answers: String
+	}
 `;
