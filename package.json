@@ -46,7 +46,7 @@
     "axios": "^0.21.1",
     "chai": "^4.2.0",
     "mocha": "^8.2.0",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.20",
     "prettier": "^2.1.2",
     "sequelize-cli": "^6.2.0"
   }
